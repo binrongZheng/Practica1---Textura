@@ -9,10 +9,8 @@
 
 using namespace std;
 const GLint WIDTH = 800, HEIGHT = 800;
-bool WIREFRAME = false;
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
-void DrawVAO();
 GLfloat mixValor;
 
 int main() {
@@ -56,7 +54,6 @@ int main() {
 	//fondo	
 	
 	//cargamos los shader
-//	Shader myShader ("./src/SimpleVertexShader.vertexshader", "./src/SimpleFragmentShader.fragmentshader");
 	Shader myShader("./src/textureVertex.vertexshader", "./src/textureFragment.fragmentshader");
 
 	GLfloat VertexBufferObject[] = {		
@@ -171,21 +168,8 @@ int main() {
 		glBindTexture(GL_TEXTURE_2D, texture2);
 		glUniform1i(glGetUniformLocation(myShader.Program, "ourTexture2"),1);
 
-		
-
 		//establecer el shader
 		myShader.USE();
-		//Ejercicio2
-/*		GLfloat timeValue = glfwGetTime(); 
-		GLfloat valor = abs((sin(timeValue)/2));
-		
-		GLint variableShader = glGetUniformLocation(myShader.Program, "offset");
-		glUniform1f(variableShader, valor);
-		GLfloat greenValue = (sin(timeValue) / 2) + 0.5;
-		GLint vertexColorLocation = glGetUniformLocation(myShader.Program, "ourColor");
-		glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
-		*/
-
 		
 		GLfloat variableShader = glGetUniformLocation(myShader.Program,"Valor");
 		glUniform1f(variableShader, mixValor);
@@ -193,7 +177,6 @@ int main() {
 		//pintar el VAO
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,0);
-//		DrawVAO();
 		glBindVertexArray(0);
 
 		// Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
@@ -214,25 +197,9 @@ int main() {
 	exit(EXIT_SUCCESS);
 }
 
-
-void DrawVAO() {
-	
-	if (WIREFRAME) {
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-	}
-	else {
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-	}
-
-	
-}
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
-	if (key == GLFW_KEY_W && action == GLFW_PRESS)
-		WIREFRAME = !WIREFRAME;
 	if (key == GLFW_KEY_UP && mixValor + 0.02 <= 1)
 		mixValor += 0.02;
 	if (key == GLFW_KEY_DOWN && mixValor - 0.02 >= 0)
